@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Grid</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #000;
+            color: green;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0px;
+            padding: 0px;
+            max-width: 100%;
+            margin: auto;
+        }
+
+        .grid-item {
+            position: relative;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            max-height: auto; /* Adjust the max-height as needed */
+        }
+        .grid-item:hover img {
+            /* transform: scale(1.5) translate(-50%, -50%); */
+            /* transform: (-50%, -50%); */
+            position: fixed;
+            /* top: 50%; */
+            left: 2%;
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+            z-index: 9999; /* Adjust the z-index as needed */
+        }
+
+        p {
+            position: absolute;
+            top: 2%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: green;
+            padding-left: 1%;
+            padding-right: 1%;
+            background: rgb(0 0 0 / 50%);
+            margin: 0;
+            z-index: 2; /* Ensure the text is above the image */
+        }
+    </style>
+    <script>
+        window.addEventListener("beforeunload", function () {
+        document.body.classList.add("animate-out");
+        });
+        // Auto-reload the page every 30 seconds (30000 milliseconds) if the current second is odd
+        setInterval(function() {
+            // var currentSecond = new Date().getSeconds();
+            // var currentMsecond = new Date().getMilliseconds();
+            // if (currentSecond % 10 !== 0) {
+            //     if (currentMsecond > 700){
+            // var currentSecond = new Date().getSeconds();
+            // if (currentSecond % 2 !== 0) {
+                // location.reload();
+                window.location.href = ''
+
+            // }
+        }, 30000);
+
+        setInterval(function() {
+            var currentSecond = new Date().getSeconds();
+            var currentMsecond = new Date().getMilliseconds();
+            if (currentSecond % 2 !== 0) {
+                if (currentMsecond > 700){
+            var images = document.getElementsByTagName('img');
+            var timestamp = new Date().getTime();
+            for (var i = 0; i < images.length; i++) {
+                var src = images[i].src;
+                // images[i].src = '';
+                
+                images[i].src = src.split('?')[0] + '?timestamp=' + timestamp;
+            }}}
+        }, 200);
+    </script>
+</head>
+<body>
+    <div class="grid-container">
+        {% for image in images %}
+            <div class="grid-item">
+                <a href="{{ image['path'] }}">
+                    <img src="{{ image['path'] }}" alt="{{ image['name'] }}">
+                    <p>{{ image['name'] }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
