@@ -8,6 +8,8 @@ from datetime import datetime, timedelta
 
 
 screenshot_path = "static/"
+sharedFolderPath = "C:\VmSharedFolder"
+offFile = r"off.txt"
 active_threads = {}
 last_thread_creation_time = {}
 def is_screen_active(port,host="127.1.1.0",timeout=2):
@@ -24,8 +26,9 @@ def is_screen_active(port,host="127.1.1.0",timeout=2):
 def capture_screenshot(host="127.1.1.0",port=5505):
     connectTo = host+"::"+str(port)
     isHostActive = is_screen_active(port,host)
-    print(isHostActive)
-    while isHostActive:# and not termination_flag:
+    if isHostActive:
+        print(isHostActive,port)
+    while isHostActive and not getOffInfoFromFolder(sharedFolderPath,port):# and not termination_flag:
         isHostActive = is_screen_active(port,host)
         try:
             print("Getting screenshot of",port)
@@ -36,27 +39,41 @@ def capture_screenshot(host="127.1.1.0",port=5505):
             sleep(sleep_duration)
             isHostActive = is_screen_active(port,host)
             if isHostActive:
-                client.refreshScreen()
-                client.captureScreen(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png",True)
-                client.disconnect()
+                if not getOffInfoFromFolder(sharedFolderPath,port):
+                    client.refreshScreen()
+                    client.captureScreen(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png",True)
+                    client.disconnect()
 
 
             sleep(1)  # Wait for 3 seconds before refreshing the screenshot
         except:
             pass    
     try:
-        if os.path.exists(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png"):
-            print("Deleted Off")
-            os.remove(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png")
+        try:
+            del active_threads[port]
+        except:
+            pass
+        if os.path.exists(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png"):
+            print("Deleted Off",port)
+            os.remove(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png")
     except:
         sleep(.2)
-        if os.path.exists(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png"):
-            print("Deleted Off")
-            os.remove(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png")
-    del active_threads[port]
+        if os.path.exists(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png"):
+            print("Deleted Off",port)
+            os.remove(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png")
+    try:
+        del active_threads[port]
+    except:
+        pass
 
 
-
+def getOffInfoFromFolder(folderPath,port):
+    offFullPath = os.path.join(folderPath,str(int(str(port)[-2:])),offFile)
+    # print(offFullPath)
+    if os.path.exists(offFullPath):
+        return True#,offFullPath,os.path.getctime(offFullPath)
+    else:
+        return False#,None,None
 
 
 def start_thread(host,port):
@@ -76,24 +93,31 @@ def start_thread(host,port):
         print(f"Thread for {host}:{port} is already running")
 
 def deleteImages(host,port):
-        if os.path.exists(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png"):
-            creation_time = datetime.fromtimestamp(os.path.getctime(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png"))
+        if os.path.exists(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png"):
+            creation_time = datetime.fromtimestamp(os.path.getctime(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png"))
             current_time = datetime.now()
             age = current_time - creation_time
             if age > timedelta(minutes=2):
-                print("Deleted Off")
+                print("Deleted Off",port)
                 try:
-                    os.remove(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png")
+                    del active_threads[port]
+                    os.remove(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png")
                 except:
                     sleep(.2)
-                    if os.path.exists(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png"):
-                        print("Deleted Off")
-                        os.remove(screenshot_path+host.replace(".","")+"-"+str(port)[-3:]+".png")
+                    try:
+                        del active_threads[port]
+                    except:
+                        pass
+                    if os.path.exists(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png"):
+                        print("Deleted Off",port)
+                        os.remove(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png")
 
+
+# print(getOffInfoFromFolder(sharedFolderPath,5501))
 
 while True:
     for i in range(30): #a cada 10s*6(1m)*10(10m)*6(60m) deletar as imagens
-        for port in range(5501, 5699):
+        for port in range(5501, 5699):#range(5510,5511):#
             
             if port in active_threads:
                 print("skip",port)
@@ -107,7 +131,7 @@ while True:
         try:
             for port in active_threads:
                 isHostActive = is_screen_active(port,host)
-                if not isHostActive:
+                if not isHostActive and getOffInfoFromFolder(sharedFolderPath,port):
                     deleteImages(host,port)
                     # del active_threads[port]
                     print("deletadas",port)
