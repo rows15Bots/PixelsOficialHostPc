@@ -79,7 +79,7 @@ def editLineContaining(fileName, targetString, newContent,folderPath = None):
 
 currIpList = []
 
-def ipManager(sharedFolderName):
+def ipManagerAdd(sharedFolderName):
     #Get ip files and list them
     listOfIpFiles = getListOfIpFiles(getSharedConfigFolders(sharedFolderName))
     #Get Ips and save in a list
@@ -90,7 +90,10 @@ def ipManager(sharedFolderName):
         if ip not in currIpList and asking not in status:
             currIpList.append(ip)
 
+def ipManagerAnswer(sharedFolderName):
+    listOfIpFiles = getListOfIpFiles(getSharedConfigFolders(sharedFolderName))
     for file in listOfIpFiles:
+        ip = readLineContaining(file,"Ip: ","").replace("Ip: ","").replace("\n","")
         status = readLineContaining(file,"Status: ","").replace("Status: ","").replace("\n","")
         if asking in status:
             if ip not in currIpList:
@@ -108,9 +111,15 @@ counter = 4
 while True:
     counter +=1
     print("-----------")
+    currIpList = []
     for f in sharedConfigFolders:
         if os.path.exists(f):
-            ipManager(f)
+            ipManagerAdd(f)
+        else:
+            print(f,"not available")
+    for f in sharedConfigFolders:
+        if os.path.exists(f):
+            ipManagerAnswer(f)
         else:
             print(f,"not available")
     if counter %5 == 0:
