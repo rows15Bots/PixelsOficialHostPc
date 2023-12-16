@@ -15,8 +15,9 @@ approved = "approved"
 rejected = "rejected"
 asking = "asking"
 baseSharedConfigFolder = r"C:\\VmSharedFolder\\"
-sharedConfigFolders =   ["\\\\DESKTOP-CCBHJE3\\VmSharedFolder"]
-                        # "\\\\DESKTOP-A804AU5\\VmSharedFolder"]
+sharedConfigFolders =   ["\\\\DESKTOP-CCBHJE3\\VmSharedFolder",
+                         "\\\\DESKTOP-A804AU5\\VmSharedFolder",
+                         "\\\\ZPANGA\\VmSharedFolder"]
 
 defaultSimulVmsString = "Status: "
 
@@ -106,6 +107,7 @@ def ipManager(sharedFolderName):
 counter = 4    
 while True:
     counter +=1
+    print("-----------")
     for f in sharedConfigFolders:
         if os.path.exists(f):
             ipManager(f)
