@@ -4,26 +4,41 @@ from time import sleep
 import time
 import socket
 import os
+import logging
+from icecream import ic, IceCreamDebugger
+import ycecream
+logLevel = "INFO"
+logging.basicConfig(level=logLevel)
+log = logging.getLogger(__name__)
+match logLevel:
+    case "DEBUG":
+        yc = ycecream.y.configure(output=log.debug,prefix=" ",show_enter=True,show_exit=True)
+    case "INFO":
+        yc = ycecream.y.configure(output=log.info,prefix=" ",show_enter=True,show_exit=False)
 
-def capture_screenshot(host="127.1.1.0",port=5505):
-    connectTo = host+"::"+str(port)
-    try:
-        print("Getting screenshot of",port)
 
-        client = api.connect(connectTo)
-        sleep(1)
-        # current_time = time.time()
-        # sleep_duration = 2 - (current_time % 2)  # Adjust 2 to the desired even interval
-        # sleep(sleep_duration)
-        client.refreshScreen()
-        client.captureScreen("test.png",True)
-        # client.captureRegion("test.png",0,0,1920,1080,True)
-        sleep(3)
-        client.disconnect()
-        print("OK",port)
+# yc= ycecream.y.configure(output=log.debug,prefix="Debug => ",show_enter=False,show_exit=True)
+# yc.configure(show_delta=False,show_time=False,compact=True,line_length=3,wrap_indent=20,values_only=True,values_only_for_fstrings=True)
+# print(ycInfo is ycDbg)
+# print(ycDbg.configure())
+class Palhaco():
+    # @ycInfo()
+    @yc()
+    def apertarNariz(self):
+        pass
+        
+        # print("honk!")
+    @yc()
+    def levantarDedos(self,quantidade):
+        # print(vars())
+        pass
+        # print(f"levantei {quantidade} dedos")
+    @yc()
+    def somarSalarioMentalmente(self,dia1,dia2,dia3):
+        return sum([dia1,dia2,dia3])
+    
+p = Palhaco()
 
-        sleep(1)  # Wait for 3 seconds before refreshing the screenshot
-    except:
-        pass   
-
-capture_screenshot(port=5502)
+p.apertarNariz()
+p.levantarDedos(3)
+p.somarSalarioMentalmente(3,5,2)

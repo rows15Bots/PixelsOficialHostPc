@@ -14,10 +14,9 @@
         }
 
         .grid-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0px;
-            padding: 0px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
             max-width: 100%;
             margin: auto;
         }
@@ -30,22 +29,24 @@
         img {
             max-width: 100%;
             height: auto;
-            max-height: auto; /* Adjust the max-height as needed */
+            max-height: 300px;
+            cursor: pointer;
         }
-        .grid-item:hover img {
 
+        .grid-item img.expanded {
             position: fixed;
-            /* top: 50%; */
-            left: 2%;
-            width: auto;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            object-fit: contain;
-            z-index: 9999; /* Adjust the z-index as needed */
+            max-height: 100%;
+            object-fit: fill;
+            z-index: 9999;
         }
 
         p {
             position: absolute;
-            top: 4%;
+            top: 6%;
             left: 50%;
             font-size: 40px;
             transform: translate(-50%, -50%);
@@ -54,46 +55,77 @@
             padding-right: 1%;
             background: rgb(0 0 0 / 100%);
             margin: 0;
-            z-index: 2; /* Ensure the text is above the image */
+            z-index: 2;
         }
     </style>
     <script>
+        var isImageExpanded = false;
         window.addEventListener("beforeunload", function () {
-        document.body.classList.add("animate-out");
+            document.body.classList.add("animate-out");
         });
+
+
+        
+        setInterval(async function () {
+            var currentSecond = new Date().getSeconds();
+            var currentMsecond = new Date().getMilliseconds();
+            // if (currentSecond % 2 !== 0) {
+                if (currentMsecond > 700) {
+                    var images = document.getElementsByTagName('img');
+                    var timestamp = new Date().getTime();
+                    for (var i = 0; i < images.length; i++) {
+                        var src = images[i].src;
+                        
+                        newSrc = src.split('?')[0] + '?timestamp=' + timestamp;
+                        images[i].src = newSrc
+                        
+                    }
+                }
+            // }
+        }, 200);
         // Auto-reload the page every 30 seconds (30000 milliseconds) if the current second is odd
         setInterval(function() {
-                window.location.href = ''
+            if (!isImageExpanded){
+                window.location.href = ''}
 
             // }
         }, 15000);
+        document.addEventListener('click', function (event) {
+        if (event.target.tagName === 'IMG') {
+            var clickedImage = event.target;
+            var imageTitle = clickedImage.alt;
+            
+            // Toggle the 'expanded' class
+            clickedImage.classList.toggle('expanded');
 
-        setInterval(function() {
-            var currentSecond = new Date().getSeconds();
-            var currentMsecond = new Date().getMilliseconds();
-            if (currentSecond % 2 !== 0) {
-                if (currentMsecond > 700){
-            var images = document.getElementsByTagName('img');
-            var timestamp = new Date().getTime();
-            for (var i = 0; i < images.length; i++) {
-                var src = images[i].src;
-
-                
-                images[i].src = src.split('?')[0] + '?timestamp=' + timestamp;
-            }}}
-        }, 200);
+            // Change the title to the image name
+            document.title = imageTitle;
+            isImageExpanded = clickedImage.classList.contains('expanded');
+        }
+    });
     </script>
 </head>
 <body>
-    <div class="grid-container">
-        {% for image in images %}
-            <div class="grid-item">
-                <a href="{{ image['path'] }}">
-                    <img src="{{ url_for('serve_image', folder=image['path'].split('/')[3], filename=image['name'] + '.png') }}" alt="{{ image['name'] }}">
-                    <p>{{ image['name'] }}</p>
-                </a>
-            </div>
-        {% endfor %}
-    </div>
+    {% set grouped_images = {} %}
+    {% for image in images %}
+        {% set prefix = image['name'][:3] %}
+        {% if grouped_images[prefix] is not defined %}
+            {% set _ = grouped_images.update({prefix: []}) %}
+        {% endif %}
+        {% set _ = grouped_images[prefix].append(image) %}
+    {% endfor %}
+
+    {% for prefix, images_group in grouped_images.items() %}
+        <div class="grid-container" id="grid-container-{{ prefix }}">
+            {% for image in images_group %}
+                <div class="grid-item">
+                    <!-- <a href="{{ image['path'] }}"> -->
+                        <img src="{{ image['path'] }}" alt="{{ image['name'] }}">
+                        <p>{{ image['name'] }}</p>
+                    <!-- </a> -->
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 </body>
 </html>
