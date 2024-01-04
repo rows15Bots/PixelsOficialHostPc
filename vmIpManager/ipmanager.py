@@ -17,6 +17,11 @@ asking = "asking"
 baseSharedConfigFolder = r"C:\\VmSharedFolder\\"
 sharedConfigFolders =   ["\\\\DESKTOP-CCBHJE3\\VmSharedFolder",
                          "\\\\DESKTOP-A804AU5\\VmSharedFolder",
+                         "\\\\RIG001\\VmSharedFolder",
+                         "\\\\RIG002\\VmSharedFolder",
+                        #  "\\\\EDITME\\VmSharedFolder",
+                        #  "\\\\EDITME\\VmSharedFolder",
+                        #  "\\\\EDITME\\VmSharedFolder",
                          "\\\\ZPANGA\\VmSharedFolder"]
 
 defaultSimulVmsString = "Status: "
