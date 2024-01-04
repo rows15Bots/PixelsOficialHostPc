@@ -128,18 +128,24 @@ while True:
     print("-----------")
     currIpList = []
     for f in sharedConfigFolders:
-        if os.path.exists(f):
-            ipManagerAdd(f)
-        else:
-            print(f,"not available")
+        try:
+            if os.path.exists(f):
+                ipManagerAdd(f)
+            else:
+                print(f,"not available")
+        except Exception:
+            pass
     for f in sharedConfigFolders:
-        if os.path.exists(f):
-            ipManagerAnswer(f)
+        try:
+            if os.path.exists(f):
+                ipManagerAnswer(f)
+        except Exception:
+            pass
         else:
             print(f,"not available")
     if counter %5 == 0:
         print(currIpList)
-    sleep(5)
+    sleep(1)
 #Check for asking and add to the list if needed
     # if asking in statusLine:
     #     pass
