@@ -5,6 +5,9 @@ import sys
 from time import sleep
 import subprocess
 
+# configPath = r"C:\\PixelsConfig\\"
+# configFile = r"pixelsVmHelperCreation.txt"
+# defaultVmWareFolderString = "Vmware Folder: "
 def interpretActionRange(actionRange):
     if ':' in actionRange:
         # If ':' is present, split and return number1, number2
