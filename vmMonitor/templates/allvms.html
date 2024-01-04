@@ -74,38 +74,31 @@
             justify-content: flex-start;
             align-items: center;
             padding: 5px;
+            background-color: #10002B;
         }
-
+        .expanded {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 95%;
+            height: 100%;
+            /* max-height: 100%; */
+            object-fit: contain;
+            z-index: 9999;
+        }
         .vm-image-container {
             background-color: #59189a2c;
             padding: 5px;
             border: 1px solid #3c3a4f;
             border-radius: 5px;
             margin-right: 5px;
-            max-width: 80vw;
-            min-width: min(500px, 100vw);
-            min-height: min(250px, 100vh);
             margin-bottom: 5px;
         }
-        
 
         .vm-image {
-            width: 100vw;
             max-width: 500px;
             max-height: 500px;
             border: 1px solid #3c3a4f;
-            
-            
-        }
-        .expanded {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: auto;
-            /* max-height: 100%; */
-            object-fit: fill;
-            z-index: 9999;
         }
 
         .interval-section {
@@ -131,21 +124,6 @@
             margin: 0 10px;
             width: 100px;
         }
-        p {
-            /* position: relative;
-            top: 0;
-            left: 50%;
-            width: 40%; */
-            /* font-size: 25px; */
-            /* transform: translate(-50%, 100%); */
-            text-align: center;
-            /* color: red; */
-            /* padding-left: 1%; */
-            /* padding-right: 1%; */
-            /* background: rgb(0 0 0 / 100%); */
-            margin: 0;
-            z-index: 2;
-        }
     </style>
 </head>
 <body>
@@ -156,44 +134,39 @@
             <a type="button" href="/all" class="btn btn-secondary">View All</a>
         </div>
     </h1>
-
-
-    {% set servers = {} %}
-    {% for image in images %}
-        {% set server_name = image['name'].split('-')[0] %}
-        {% if server_name not in servers %}
-            {% set _ = servers.update({server_name: []}) %}
-        {% endif %}
-        {% set _ = servers[server_name].append(image) %}
-    {% endfor %}
-
-    {% for server_name, vms in servers.items() %}
-        <div class="server-section">
-            <div class="server-name show" data-toggle="collapse" data-target="#{{ server_name }}">
-                <h2>{{ server_name }}</h2>
+    <div class="vm-row">
+        {% for image in images %}
+            <div class="vm-image-container">
+                <p>{{ image['name'] }}</p>
+                <img src="{{ image['path'] }}" alt="{{ image['name'] }}" class="vm-image">
             </div>
-            <div class="vm-row collapse show" id="{{ server_name }}">
-                {% for vm in vms %}
-                    <div class="vm-image-container">
-                        <p>{{vm['name']}}</p>
-                        <img src="{{ vm['path'] }}" alt="{{ vm['name'] }}" class="vm-image">
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+
+
+    
 
     <!-- Add Bootstrap JS and jQuery (required for Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    
-    <script>setInterval(function() {
-        if (!isImageExpanded) {
-            location.reload();
-        }
-    }, 15000);</script>
+    <script>setInterval(async function () {
+        var currentSecond = new Date().getSeconds();
+        var currentMsecond = new Date().getMilliseconds();
+        // if (currentSecond % 2 !== 0) {
+            if (currentMsecond > 700) {
+                var images = document.getElementsByTagName('img');
+                var timestamp = new Date().getTime();
+                for (var i = 0; i < images.length; i++) {
+                    var src = images[i].src;
+                    
+                    newSrc = src.split('?')[0] + '?timestamp=' + timestamp;
+                    images[i].src = newSrc
+                    
+                }
+            }
+        // }
+    }, 200);</script>
 
 <script>
     var isImageExpanded = false;
@@ -230,23 +203,5 @@
         }
     });
 </script>
-
-    <script>setInterval(async function () {
-        var currentSecond = new Date().getSeconds();
-        var currentMsecond = new Date().getMilliseconds();
-        // if (currentSecond % 2 !== 0) {
-            if (currentMsecond > 700) {
-                var images = document.getElementsByTagName('img');
-                var timestamp = new Date().getTime();
-                for (var i = 0; i < images.length; i++) {
-                    var src = images[i].src;
-                    
-                    newSrc = src.split('?')[0] + '?timestamp=' + timestamp;
-                    images[i].src = newSrc
-                    
-                }
-            }
-        // }
-    }, 200);</script>
 </body>
 </html>

@@ -1,3 +1,6 @@
+ws = Phaser.Display.Canvas.CanvasPool.pool[0].parent.game.scene.scenes[1].camera.scene.stateManager.room.connection.transport.ws
+ws = Phaser.Display.Canvas.CanvasPool.pool[0].parent.game.scene.scenes[1].stateManager.room.connection.transport.ws
+
 // (XY array)
 var currentPos = game.scene.systemScene.scene.manager.scenes[1].selfPlayer.container; 
 let xValue = currentPos.x;
