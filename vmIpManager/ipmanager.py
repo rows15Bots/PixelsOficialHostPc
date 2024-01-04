@@ -28,12 +28,22 @@ defaultSimulVmsString = "Status: "
 
 def readLineContaining(fileName,targetString,folderPath):
         filePath = os.path.join(folderPath, fileName)
-        with open(filePath, 'r') as file:
-            lines = file.readlines()
-        for line in lines:
-            if targetString in line:
-                return line
-
+        try:
+            with open(filePath, 'r') as file:
+                lines = file.readlines()
+            for line in lines:
+                if targetString in line:
+                    return line
+        except:
+            sleep(.1)
+            try:
+                with open(filePath, 'r') as file:
+                    lines = file.readlines()
+                for line in lines:
+                    if targetString in line:
+                        return line
+            except:
+                pass
 
 
 def getSharedConfigFolders(p = None):
