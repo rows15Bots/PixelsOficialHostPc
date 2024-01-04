@@ -24,30 +24,35 @@ def is_screen_active(port,host="127.1.1.0",timeout=2):
        return True
 
 def capture_screenshot(host="127.1.1.0",port=5505):
+    client = None
     connectTo = host+"::"+str(port)
     isHostActive = is_screen_active(port,host)
     if isHostActive:
         print(isHostActive,port)
+        client = api.connect(connectTo)
+        name = screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]
     while isHostActive and not getOffInfoFromFolder(sharedFolderPath,port):# and not termination_flag:
         isHostActive = is_screen_active(port,host)
         try:
             print("Getting screenshot of",port)
-
-            client = api.connect(connectTo)
             current_time = time.time()
-            sleep_duration = 2 - (current_time % 2)  # Adjust 2 to the desired even interval
+            sleep_duration = 1 - (current_time % 1)  # Adjust 2 to the desired even interval
+            # sleep_duration = .5
             sleep(sleep_duration)
             isHostActive = is_screen_active(port,host)
             if isHostActive:
                 if not getOffInfoFromFolder(sharedFolderPath,port):
                     client.refreshScreen()
-                    client.captureScreen(screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]+".png",True)
-                    client.disconnect()
+                    client.captureScreen(name+".png",True)
+                    sleep(.1)
 
 
-            sleep(1)  # Wait for 3 seconds before refreshing the screenshot
+            sleep(.1)  # Wait for 3 seconds before refreshing the screenshot
         except:
             pass    
+    if client:
+        client.disconnect()
+    # print("sai da thread", isHostActive ,getOffInfoFromFolder(sharedFolderPath,port))
     try:
         try:
             del active_threads[port]
@@ -117,7 +122,7 @@ def deleteImages(host,port):
 
 while True:
     for i in range(30): #a cada 10s*6(1m)*10(10m)*6(60m) deletar as imagens
-        for port in range(5501, 5699):#range(5510,5511):#
+        for port in range(5001, 5301):#range(5510,5511):#
             
             if port in active_threads:
                 print("skip",port)
@@ -133,9 +138,9 @@ while True:
                 isHostActive = is_screen_active(port,host)
                 if not isHostActive and getOffInfoFromFolder(sharedFolderPath,port):
                     deleteImages(host,port)
-                    # del active_threads[port]
+                    del active_threads[port]
                     print("deletadas",port)
         except:
             pass
 
-        sleep(5)
+        sleep(10)

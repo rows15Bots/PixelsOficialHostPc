@@ -7,15 +7,32 @@ app = Flask(__name__)
 image_folders = [
     '\\\\DESKTOP-CCBHJE3\\static',
     '\\\\DESKTOP-A804AU5\\static',
-    "\\\\ZPANGA\\static",
-    "\\\\RIG001\\static"
+    # "\\\\ZPANGA\\static",
+    "\\\\RIG001\\static",
+    "\\\\RIG002\\static",
+    "\\\\RIG003\\static",
+    "\\\\SVXEON\\static",
+    "\\\\SVI7\\static",
 
 ]
+
+filteredImageFolders = []
+
+for image_folder in image_folders:
+        try:
+            folder_name = os.path.dirname(image_folder).split("\\")[2][-4:]
+            print("FOLDERNAME",folder_name)
+            _ = [f for f in os.listdir(image_folder) if f.endswith('.png')]
+            filteredImageFolders.append(image_folder)
+        except Exception as e:
+            print(e)
+            print("filtered")
+
 
 # Route to serve the images
 @app.route('/<desktop>/static/<filename>')
 def serve_image(desktop, filename):
-    valid_folders = [f for f in image_folders if desktop.lower() in f.lower()]
+    valid_folders = [f for f in filteredImageFolders if desktop.lower() in f.lower()]
     if valid_folders:
         folder_path = os.path.join(valid_folders[0], filename)
         
@@ -27,7 +44,7 @@ def serve_image(desktop, filename):
 @app.route('/')
 def index():
     images = []
-    for image_folder in image_folders:
+    for image_folder in filteredImageFolders:
         try:
             folder_name = os.path.dirname(image_folder).split("\\")[2][-4:]
             print("FOLDERNAME",folder_name)
@@ -45,7 +62,7 @@ def index():
 @app.route('/all')
 def showAll():
     images = []
-    for image_folder in image_folders:
+    for image_folder in filteredImageFolders:
         try:
             folder_name = os.path.dirname(image_folder).split("\\")[2][-4:]
             print("FOLDERNAME",folder_name)
