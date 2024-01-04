@@ -31,9 +31,9 @@ def capture_screenshot(host="127.1.1.0",port=5505):
         print(isHostActive,port)
         name = screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]
     while isHostActive and not getOffInfoFromFolder(sharedFolderPath,port):# and not termination_flag:
-        print('whilando',port)
+        # print('whilando',port)
         isHostActive = is_screen_active(port,host)
-        print(isHostActive,port,"  2")
+        # print(isHostActive,port,"  2")
         try:
             client = api.connect(connectTo)
             print("Getting screenshot of",port)
@@ -54,7 +54,7 @@ def capture_screenshot(host="127.1.1.0",port=5505):
         except:
             pass    
     # if client:
-    print("sai da thread", isHostActive ,getOffInfoFromFolder(sharedFolderPath,port),port)
+    # print("sai da thread", isHostActive ,getOffInfoFromFolder(sharedFolderPath,port),port)
     try:
         try:
             del active_threads[port]
@@ -124,7 +124,7 @@ def deleteImages(host,port):
 
 while True:
     for i in range(30): #a cada 10s*6(1m)*10(10m)*6(60m) deletar as imagens
-        for port in range(5039, 5351):#range(5510,5511):#
+        for port in range(5001, 5301):#range(5510,5511):#
             
             if port in active_threads:
                 print("skip",port)
