@@ -1,0 +1,2 @@
+py vmCopyAndReplace.py
+pause
