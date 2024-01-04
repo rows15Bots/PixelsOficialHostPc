@@ -1,0 +1,2 @@
+py remote_screenGrabber.py
+pause

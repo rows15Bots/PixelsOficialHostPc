@@ -1,0 +1,2 @@
+py remote_central_control.py
+pause

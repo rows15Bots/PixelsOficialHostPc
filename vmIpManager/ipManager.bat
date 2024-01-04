@@ -1,0 +1,2 @@
+py ipmanager.py
+pause

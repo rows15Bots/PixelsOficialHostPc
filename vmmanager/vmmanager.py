@@ -67,7 +67,10 @@ def getSharedConfigFolders():
     sharedConfigFolderFileList = list(p.glob("./*/sharedConfig.json"))
     sharedConfigFolderList = []
     for folder in sharedConfigFolderFileList:
-        sharedConfigFolderList.append(os.path.dirname(folder))
+        testForNumbersSplit = str(os.path.dirname(folder)).split("\\")[-1]
+        # print(testForNumbersSplit,testForNumbersSplit.isdigit())
+        if testForNumbersSplit.isdigit():
+            sharedConfigFolderList.append(os.path.dirname(folder))
     return sharedConfigFolderList
 
 def getOffInfoFromFolder(folderPath):
@@ -129,6 +132,7 @@ def startVm(startPath):
 
 
 #Main
+
 
 createConfigFile()
 counter = 60
