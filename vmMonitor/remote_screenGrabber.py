@@ -29,11 +29,11 @@ def capture_screenshot(host="127.1.1.0",port=5505):
     isHostActive = is_screen_active(port,host)
     if isHostActive:
         print(isHostActive,port)
-        client = api.connect(connectTo)
         name = screenshot_path+socket.gethostname().replace("-","")+"-"+str(port)[-3:]
     while isHostActive and not getOffInfoFromFolder(sharedFolderPath,port):# and not termination_flag:
         isHostActive = is_screen_active(port,host)
         try:
+            client = api.connect(connectTo)
             print("Getting screenshot of",port)
             current_time = time.time()
             sleep_duration = 1 - (current_time % 1)  # Adjust 2 to the desired even interval
@@ -44,14 +44,14 @@ def capture_screenshot(host="127.1.1.0",port=5505):
                 if not getOffInfoFromFolder(sharedFolderPath,port):
                     client.refreshScreen()
                     client.captureScreen(name+".png",True)
+                    client.disconnect()
                     sleep(.1)
 
 
             sleep(.1)  # Wait for 3 seconds before refreshing the screenshot
         except:
             pass    
-    if client:
-        client.disconnect()
+    # if client:
     # print("sai da thread", isHostActive ,getOffInfoFromFolder(sharedFolderPath,port))
     try:
         try:
