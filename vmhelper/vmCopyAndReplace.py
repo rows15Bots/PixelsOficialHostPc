@@ -48,11 +48,13 @@ def inputGetter():
     print("hnp  = Make Hdds Non Persistent")
     print("hp   = Make Hdds Persistent")
     print("mnem = Check for Mnems in Shared config")
+    print("offs = Create offs in the folders selected")
     print("s    = Start Fresh Machines")
+    # print("shut = Shutdown all machines")
     print("qqq  = Exits Script")
 
     action = input("Choose Action: ")
-    if action not in ["c","hnp","hp","mnem","s","qqq"]:
+    if action not in ["c","hnp","hp","mnem","offs","s","qqq"]:
         print("Failed to interpret the Action.")
         return None,None
     if action == "qqq":
@@ -79,6 +81,17 @@ def actionTaker(action,vmRange):
         virtualMachinesFolder = r"C:\Virtual Machines"
         sharedFolder = r"C:\VmSharedFolder"
         match action:
+            case "offs":
+                print("this will create offs in the folders chosen if it doesn't already exists")
+                input("press Enter to continue...")
+                for number in vmRange:
+                    off_file_path = os.path.join(sharedFolder, str(number), 'off.txt')
+                    if not os.path.exists(off_file_path):
+                        with open(off_file_path, 'w') as off_file:
+                            off_file.write("off")
+                        print("Created Off:",number)
+
+
             case "mnem":
                 print("this will check if the len is >12 characters long AND if it is empty")
                 printString = input("print results (y/n):")
