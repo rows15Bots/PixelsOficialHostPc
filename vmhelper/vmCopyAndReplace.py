@@ -5,6 +5,20 @@ import sys
 from time import sleep
 import subprocess
 
+# string1 = False
+# string2 = False
+# string3 = False
+# string4 = False
+
+# def checkCustomPaths():
+#     pstring1 = r"C:\Program Files (x86)\VMware\VMware Workstation"
+#     pstring2 = r"C:\Program Files (x86)\VMware\VMware Workstation"
+#     pstring2 = r"C:\Program Files (x86)\VMware\VMware Workstation"
+#     pstring2 = r"C:\Program Files (x86)\VMware\VMware Workstation"
+#     pstring2 = r"C:\Program Files (x86)\VMware\VMware Workstation"
+#     print(os.path.exists(pstring1))
+# checkCustomPaths()
+
 # configPath = r"C:\\PixelsConfig\\"
 # configFile = r"pixelsVmHelperCreation.txt"
 # defaultVmWareFolderString = "Vmware Folder: "
