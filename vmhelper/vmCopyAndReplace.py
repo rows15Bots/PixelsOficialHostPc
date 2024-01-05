@@ -47,11 +47,12 @@ def inputGetter():
     print("c    =  Create Vms")
     print("hnp  = Make Hdds Non Persistent")
     print("hp   = Make Hdds Persistent")
+    print("mnem = Check for Mnems in Shared config")
     print("s    = Start Fresh Machines")
     print("qqq  = Exits Script")
 
     action = input("Choose Action: ")
-    if action not in ["c","hnp","hp","s","qqq"]:
+    if action not in ["c","hnp","hp","mnem","s","qqq"]:
         print("Failed to interpret the Action.")
         return None,None
     if action == "qqq":
@@ -78,6 +79,38 @@ def actionTaker(action,vmRange):
         virtualMachinesFolder = r"C:\Virtual Machines"
         sharedFolder = r"C:\VmSharedFolder"
         match action:
+            case "mnem":
+                print("this will check if the len is >12 characters long AND if it is empty")
+                printString = input("print results (y/n):")
+                wrongMnems = []
+                correctMnems = []
+                for number in vmRange:
+                        sharedConfig_file_path = os.path.join(sharedFolder, str(number), 'sharedConfig.json')
+                        if os.path.exists(sharedConfig_file_path):
+                            with open(sharedConfig_file_path, 'r') as file:
+                                for line in file:
+                                    if '"mnem":' in line:
+                                        if len(line.split(":")[1]) < 12 or '""' in line:
+                                            wrongMnems.append([number,line])
+                                        else:
+                                            correctMnems.append(number)
+
+
+
+
+
+
+                                        if printString == "y" or printString == "Y":
+                                            print(line)
+
+                print("-------------------------")
+                print("Wrong Mnems:")
+                for i in wrongMnems:
+                    print(i)
+                print("Correct Mnems:")
+                print(correctMnems)
+
+
             case "s":
                 stillNeedsToStart = []
                 print("Remember to add the vms to vmware to track progress")
