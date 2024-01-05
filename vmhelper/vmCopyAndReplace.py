@@ -94,15 +94,10 @@ def actionTaker(action,vmRange):
                                             wrongMnems.append([number,line])
                                         else:
                                             correctMnems.append(number)
-
-
-
-
-
-
                                         if printString == "y" or printString == "Y":
                                             print(line)
-
+                for i in range(30):
+                    print(" ")
                 print("-------------------------")
                 print("Wrong Mnems:")
                 for i in wrongMnems:
