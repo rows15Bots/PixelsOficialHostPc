@@ -5,16 +5,15 @@ app = Flask(__name__)
 
 # Network share paths
 image_folders = [
-    '\\\\DESKTOP-CCBHJE3\\static',
-    '\\\\DESKTOP-A804AU5\\static',
-    # "\\\\ZPANGA\\static",
-    "\\\\RIG001\\static",
-    "\\\\RIG002\\static",
-    "\\\\RIG003\\static",
-    "\\\\SVXEON\\static",
-    "\\\\SVI7\\static",
+                "\\\\DESKTOP-CCBHJE3\\static",
+                "\\\\DESKTOP-A804AU5\\static",
+                "\\\\RIG001\\static",
+                "\\\\RIG002\\static",
+                "\\\\RIG003\\static",
+                "\\\\SVI7\\static",
+                "\\\\SVXEON\\static",
+                ]
 
-]
 
 filteredImageFolders = []
 
@@ -68,7 +67,7 @@ def showAll():
             print("FOLDERNAME",folder_name)
             image_files = [f for f in os.listdir(image_folder) if f.endswith('.png')]
             print(image_files)
-            images.extend([{'name': f[-10:], 'path': f'http://localhost:5001/{folder_name}/static/{f}'} for f in image_files])
+            images.extend([{'name': f[-10:], 'path': f'/{folder_name}/static/{f}'} for f in image_files])
         except Exception as e:
             print(e)
             print("PIMBA")
