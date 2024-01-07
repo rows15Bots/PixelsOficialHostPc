@@ -140,10 +140,10 @@ while True:
         try:
             if os.path.exists(f):
                 ipManagerAnswer(f)
+            else:
+                print(f,"not available")
         except Exception:
             pass
-        else:
-            print(f,"not available")
     if counter %5 == 0:
         print(currIpList)
     sleep(1)
