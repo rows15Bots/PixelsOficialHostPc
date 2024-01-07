@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VNC Viewer</title>
+  <script src="path/to/noVNC/vnc.js"></script>
+</head>
+<body>
+  <h1>VNC Viewer</h1>
+  <div id="vncCanvas"></div>
+
+  <script>
+    // Specify your VNC server details
+    var vncHost = "192.168.0.25";
+    var vncPort = "5002";
+    var vncPassword = "";
+
+    // Set up the VNC connection
+    var vncCanvas = document.getElementById('vncCanvas');
+    var rfb = new RFB(vncCanvas, vncHost, vncPort, vncPassword);
+
+    // Optionally, you can handle events such as connection close
+    rfb.addEventListener("disconnect", function() {
+      console.log("VNC connection closed");
+    });
+  </script>
+</body>
+</html>
