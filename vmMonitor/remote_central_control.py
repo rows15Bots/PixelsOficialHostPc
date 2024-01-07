@@ -4,13 +4,23 @@ import os
 app = Flask(__name__)
 
 # Network share paths
-image_folders = [
-    '\\\\DESKTOP-CCBHJE3\\static',
-    '\\\\DESKTOP-A804AU5\\static',
-    "\\\\ZPANGA\\static",
-    "\\\\RIG001\\static"
+# [
+#     '\\\\DESKTOP-CCBHJE3\\static',
+#     '\\\\DESKTOP-A804AU5\\static',
+#     "\\\\ZPANGA\\static",
+#     "\\\\RIG001\\static"
 
-]
+# ]
+
+image_folders = [
+                "\\\\DESKTOP-CCBHJE3\\static",
+                "\\\\DESKTOP-A804AU5\\static",
+                "\\\\RIG001\\static",
+                "\\\\RIG002\\static",
+                "\\\\RIG003\\static",
+                "\\\\SVI7\\static",
+                "\\\\SVXEON\\static",
+                ]
 
 # Route to serve the images
 @app.route('/<desktop>/static/<filename>')

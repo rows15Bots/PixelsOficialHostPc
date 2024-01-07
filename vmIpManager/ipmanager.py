@@ -19,10 +19,11 @@ sharedConfigFolders =   ["\\\\DESKTOP-CCBHJE3\\VmSharedFolder",
                          "\\\\DESKTOP-A804AU5\\VmSharedFolder",
                          "\\\\RIG001\\VmSharedFolder",
                          "\\\\RIG002\\VmSharedFolder",
-                        #  "\\\\EDITME\\VmSharedFolder",
-                        #  "\\\\EDITME\\VmSharedFolder",
-                        #  "\\\\EDITME\\VmSharedFolder",
-                         "\\\\ZPANGA\\VmSharedFolder"]
+                         "\\\\RIG003\\VmSharedFolder",
+                         "\\\\SVI7\\VmSharedFolder",
+                         "\\\\SVXEON\\VmSharedFolder",
+                        #  "\\\\ZPANGA\\VmSharedFolder"
+                        ]
 
 defaultSimulVmsString = "Status: "
 
