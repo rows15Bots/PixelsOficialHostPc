@@ -1,8 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set PORT=5040
 :start
+set PORT=5040
+
 :: Get PID using port 5040
 for /f "tokens=5" %%a in ('netstat -ano ^| find "0.0.0.0:%PORT%"') do (
     set PID=%%a
