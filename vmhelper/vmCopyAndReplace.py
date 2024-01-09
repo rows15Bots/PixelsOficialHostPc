@@ -44,6 +44,8 @@ def inputGetter():
     print("-----------------------------------------------------------")
     print("-----------------------------------------------------------")
     print("-----------------------------------------------------------")
+    print("addnat  =  Create Vms")
+    print("removenat  =  Create Vms")
     print("c    =  Create Vms")
     print("hnp  = Make Hdds Non Persistent")
     print("hp   = Make Hdds Persistent")
@@ -54,7 +56,7 @@ def inputGetter():
     print("qqq  = Exits Script")
 
     action = input("Choose Action: ")
-    if action not in ["c","hnp","hp","mnem","offs","s","qqq"]:
+    if action not in ["addnat","removenat","c","hnp","hp","mnem","offs","s","qqq"]:
         print("Failed to interpret the Action.")
         return None,None
     if action == "qqq":
@@ -183,6 +185,24 @@ def actionTaker(action,vmRange):
                 print("-------------------------------------")
 
 
+            case "addnat":
+                for number in vmRange:
+                    destination_folder_name = str(number)
+                    new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
+
+                    # Add lines to the .vmx file
+                    with open(new_vmx_file_path, 'a') as vmx_file:
+                        vmx_file.write("ethernet0.connectionType = \"nat\"\n")
+            case "removenat":
+                for number in vmRange:
+                    destination_folder_name = str(number)
+                    new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
+
+                    # Remove line from the .vmx file
+                    with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
+                        for line in vmx_file:
+                            if 'ethernet0.connectionType =' not in line:
+                                print(line, end='')
             case "hnp":
                 for number in vmRange:
                     destination_folder_name = str(number)
