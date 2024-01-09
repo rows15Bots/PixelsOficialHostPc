@@ -112,8 +112,8 @@ def set_status_ips(folder, folder_number):
 # Function to create and start threads for a shared folder
 def create_and_start_threads_ids(shared_folder,readOrWrite):
     
-    match readOrWrite:
-        case 'read':
+    # match readOrWrite:
+        if readOrWrite ==  'read':
             threads = []
             for i in range(1, 251):
                 thread = threading.Thread(target=get_approved_ips, args=(shared_folder, i))
@@ -123,7 +123,7 @@ def create_and_start_threads_ids(shared_folder,readOrWrite):
             # Wait for all threads to finish
             for thread in threads:
                 thread.join()
-        case 'write':
+        if readOrWrite ==  'write':
             threads = []
             for i in range(1, 251):
                 thread = threading.Thread(target=set_status_ips, args=(shared_folder, i))
@@ -133,7 +133,7 @@ def create_and_start_threads_ids(shared_folder,readOrWrite):
             # Wait for all threads to finish
             for thread in threads:
                 thread.join()
-        case 'status':
+        if readOrWrite ==  'status':
             threads = []
             for i in range(1, 251):
                 thread = threading.Thread(target=get_approved_ips, args=(shared_folder, i, True))
@@ -146,8 +146,8 @@ def create_and_start_threads_ids(shared_folder,readOrWrite):
 
 # Create and start threads for each shared folder
 def create_and_start_threads_folders(readOrWrite):
-    match readOrWrite:
-        case 'read':
+    # match readOrWrite:
+        if readOrWrite == 'read':
             shared_folder_threads = []
             for shared_folder in sharedConfigFolders:
                 thread = threading.Thread(target=create_and_start_threads_ids, args=(shared_folder,'read',))
@@ -157,7 +157,7 @@ def create_and_start_threads_folders(readOrWrite):
             # Wait for all shared folder threads to finish
             for thread in shared_folder_threads:
                 thread.join()
-        case 'write':
+        if readOrWrite ==  'write':
             shared_folder_threads = []
             for shared_folder in sharedConfigFolders:
                 thread = threading.Thread(target=create_and_start_threads_ids, args=(shared_folder,'write',))
@@ -168,7 +168,7 @@ def create_and_start_threads_folders(readOrWrite):
             for thread in shared_folder_threads:
                 thread.join()
 
-        case 'status':
+        if readOrWrite ==  'status':
             shared_folder_threads = []
             for shared_folder in sharedConfigFolders:
                 thread = threading.Thread(target=create_and_start_threads_ids, args=(shared_folder,'status',))
