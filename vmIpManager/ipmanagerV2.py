@@ -83,8 +83,12 @@ def get_approved_ips(folder, folder_number,readableOutput=False):
             ip = readLineContaining(ip_txt_path,"Ip: ","").replace("Ip: ","").replace("\n","")
             # print(ip)
             with lock:
-                if ip not in approvedIps:
-                    approvedIps.append(ip)
+                if readableOutput == True:
+                    if ip in approvedIps and ip != "off":
+                        print(folder.replace("\\","").replace("VmSharedFolder","")+" "+str(folder_number)+" - "+ip)
+                else:
+                    if ip not in approvedIps:
+                        approvedIps.append(ip)
 
 def set_status_ips(folder, folder_number):
     folder_path = os.path.join(folder, str(folder_number))
@@ -97,11 +101,12 @@ def set_status_ips(folder, folder_number):
             # print(status)
             ip = readLineContaining(ip_txt_path,"Ip: ","").replace("Ip: ","").replace("\n","")
             with lock:
+                print(" ")
                 if ip not in approvedIps:
-                    print("Action: ",approved,ip,ip_txt_path)
+                    print("Action: ",approved,folder.replace("\\","").replace("VmSharedFolder","")+" "+str(folder_number)+" - "+ip)
                     editLineContaining(ip_txt_path,"Status: ","Status: "+approved,"")
                 else:
-                    print("Action: ",rejected,ip,ip_txt_path)
+                    print("Action: ",rejected,folder.replace("\\","").replace("VmSharedFolder","")+" "+str(folder_number)+" - "+ip)
                     editLineContaining(ip_txt_path,"Status: ","Status: "+rejected,"")
 
 # Function to create and start threads for a shared folder
@@ -174,22 +179,28 @@ def create_and_start_threads_folders(readOrWrite):
             for thread in shared_folder_threads:
                 thread.join()
 
-# sleep(1)    
+# sleep(1)  
+counter = 26
 while True:
+    counter +=1
     #Default Reject:
     approvedIps = ["191.254.219.66"]
     create_and_start_threads_folders('read')
     sleep(1)
     create_and_start_threads_folders('write')
-    sleep(1)
-    create_and_start_threads_folders('read')
+    
+    if counter %27 == 0:
+        print(" ")
+        create_and_start_threads_folders('status')
+        print(" ")
+    print("-", end ="")
     sleep(1)
 
 
-    print("read Ips:")
-    approvedIps.sort()
-    for i in approvedIps:
-        print(i)
+    # print("read Ips:")
+    # approvedIps.sort()
+    # for i in approvedIps:
+    #     print(i)
 
 
 
