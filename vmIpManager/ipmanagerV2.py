@@ -193,7 +193,7 @@ while True:
         print(" ")
         create_and_start_threads_folders('status')
         print(" ")
-    print("-", end ="")
+    print("-")#, end ="")
     sleep(1)
 
 
