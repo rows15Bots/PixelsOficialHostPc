@@ -6,6 +6,7 @@ import subprocess
 import datetime
 import threading
 import pprint
+import json
 #FUTURO ler data da sauna vip e botar no começo da fila
 
 #Static Info:
@@ -66,8 +67,23 @@ def editLineContaining(fileName, targetString, newContent,folderPath = None):
         except FileNotFoundError:
             print(f"File '{fileName}' not found.")
 
+def readJsonFile( fileName,folderPath = None):
+        filePath = os.path.join(folderPath, fileName)
+        try:
+            with open(filePath, 'r') as file:
+                return converterLoad(json.loads(file.read()))
+        except FileNotFoundError:
+            return None
             
-
+def converterLoad(obj):
+    DATE_FORMAT = '%Y-%m-%dT%H:%M:%S.%f'
+    for k, v in obj.items():
+        if ('date' in k) and isinstance(v, str): #or k in "1"
+            try:
+                obj[k] = datetime.datetime.strptime(v, DATE_FORMAT)
+            except Exception as e:
+                pass
+    return obj
 
 
 lock = threading.Lock()
@@ -94,6 +110,9 @@ def get_approved_ips(folder, folder_number):
                 # print(shared_json_path)
                 status = readLineContaining(shared_json_path,"farmMap","").replace("\"farmMap\": ","").replace(",","").replace(" ","").replace("\n","").replace("\"","")
                 if status != "":
+                    # sharedDict = readJsonFile("sharedConfig.json",folder_path)
+                    # if isinstance(sharedDict,dict):
+                    #     print(sharedDict['lastSaunaFree_date'])
                 # print([folder.replace("\\","").replace("VmSharedFolder","")+" "+str(folder_number),status])
                     # print([status])
                     currentMaps[status][0] += 1
