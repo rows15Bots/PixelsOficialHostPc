@@ -132,16 +132,16 @@ def startVm(startPath):
 
 def removeREDOS(offs,timeFromOffInMinutes=10):
     threads = []
-    for i in offs:
-        hasBeenOffFor = datetime.datetime.now()-datetime.datetime.fromtimestamp(i[1])
-        if hasBeenOffFor > datetime.timedelta(minutes=timeFromOffInMinutes):
-            sleep(.1)
-            folderNumber = i[0].split("\\")[-1]
-            thread = threading.Thread(target=removeREDOSAction, args=(folderNumber,))
-            threads.append(thread)
-            thread.start()
-            # removeREDOSAction(folderNumber)
-            # print(folderNumber,hasBeenOffFor)
+    # for i in offs:
+    #     hasBeenOffFor = datetime.datetime.now()-datetime.datetime.fromtimestamp(i[1])
+    #     if hasBeenOffFor > datetime.timedelta(minutes=timeFromOffInMinutes):
+    #         sleep(.1)
+    #         folderNumber = i[0].split("\\")[-1]
+    #         thread = threading.Thread(target=removeREDOSAction, args=(folderNumber,))
+    #         threads.append(thread)
+    #         thread.start()
+    #         # removeREDOSAction(folderNumber)
+    #         # print(folderNumber,hasBeenOffFor)
 
 def removeREDOSAction(folderNumber):
     if not is_screen_active(int(folderNumber)+5000,timeout=3):
