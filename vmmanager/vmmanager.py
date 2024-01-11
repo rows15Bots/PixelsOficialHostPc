@@ -140,7 +140,7 @@ def removeREDOS(offs,timeFromOffInMinutes=10):
                 VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
                 # print(VmFullPath)
                 if os.path.isdir(VmFullPath):
-                    redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file]
+                    redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file and not 'lck' in file]
                     # print(redo_files)
                     if redo_files:
                         for redo_file in redo_files:
@@ -179,7 +179,7 @@ while True:
         counter = 0
         print("Removing files with 'REDO' in the name:")
         removeREDOS(offs)
-        print("Files have Removed.")
+        print("The files have been Removed.")
         getStatus(simulVms,a,offs)
     if getCheckIfTurnOneOn(simulVms,a,offs):
         e,*_ = getOldestOffFile(offs)
