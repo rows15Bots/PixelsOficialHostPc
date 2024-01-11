@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import datetime
 import socket
-
+import threading
 #FUTURO ler data da sauna vip e botar no começo da fila
 
 #Static Info:
@@ -131,14 +131,22 @@ def startVm(startPath):
         os.remove(fullOffPath)
 
 def removeREDOS(offs,timeFromOffInMinutes=10):
+    threads = []
     for i in offs:
         hasBeenOffFor = datetime.datetime.now()-datetime.datetime.fromtimestamp(i[1])
         if hasBeenOffFor > datetime.timedelta(minutes=timeFromOffInMinutes):
+            sleep(.01)
             folderNumber = i[0].split("\\")[-1]
+            thread = threading.Thread(target=removeREDOSAction, args=(folderNumber,))
+            threads.append(thread)
+            thread.start()
+            # removeREDOSAction(folderNumber)
             # print(folderNumber,hasBeenOffFor)
-            if not is_screen_active(int(folderNumber)+5000):
+
+def removeREDOSAction(folderNumber):
+    if not is_screen_active(int(folderNumber)+5000):
                 VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
-                # print(VmFullPath)
+                print(VmFullPath)
                 if os.path.isdir(VmFullPath):
                     redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file and not 'lck' in file]
                     # print(redo_files)
