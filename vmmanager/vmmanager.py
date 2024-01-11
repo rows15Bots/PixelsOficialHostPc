@@ -130,8 +130,8 @@ def startVm(startPath):
         print("Deleted Off")
         os.remove(fullOffPath)
 
-def removeREDOS(offs,timeFromOffInMinutes=10):
-    threads = []
+# def removeREDOS(offs,timeFromOffInMinutes=10):
+#     threads = []
     # for i in offs:
     #     hasBeenOffFor = datetime.datetime.now()-datetime.datetime.fromtimestamp(i[1])
     #     if hasBeenOffFor > datetime.timedelta(minutes=timeFromOffInMinutes):
@@ -143,35 +143,35 @@ def removeREDOS(offs,timeFromOffInMinutes=10):
     #         # removeREDOSAction(folderNumber)
     #         # print(folderNumber,hasBeenOffFor)
 
-def removeREDOSAction(folderNumber):
-    if not is_screen_active(int(folderNumber)+5000,timeout=3):
-        if not is_screen_active(int(folderNumber)+5000,timeout=3):
-            if not is_screen_active(int(folderNumber)+5000,timeout=3):
-                VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
-                # print(VmFullPath)
-                if os.path.isdir(VmFullPath):
-                    redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file and not 'lck' in file]
-                    # print(redo_files)
-                    if redo_files:
-                        for redo_file in redo_files:
-                            # print(os.path.join(VmFullPath, redo_file))
-                            file_path = os.path.join(VmFullPath, redo_file)
-                            try:
-                                os.remove(file_path)
-                                print(f"Deleted: {file_path}")
-                            except Exception as e:
-                                print(e)
-                                pass
-def is_screen_active(port,host="127.1.1.0",timeout=.5):
-    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #presumably 
-    sock.settimeout(timeout)
-    try:
-       sock.connect((host,port))
-    except:
-       return False
-    else:
-       sock.close()
-       return True
+# def removeREDOSAction(folderNumber):
+#     if not is_screen_active(int(folderNumber)+5000,timeout=3):
+#         if not is_screen_active(int(folderNumber)+5000,timeout=3):
+#             if not is_screen_active(int(folderNumber)+5000,timeout=3):
+#                 VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
+#                 # print(VmFullPath)
+#                 if os.path.isdir(VmFullPath):
+#                     redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file and not 'lck' in file]
+#                     # print(redo_files)
+#                     if redo_files:
+#                         for redo_file in redo_files:
+#                             # print(os.path.join(VmFullPath, redo_file))
+#                             file_path = os.path.join(VmFullPath, redo_file)
+#                             try:
+#                                 os.remove(file_path)
+#                                 print(f"Deleted: {file_path}")
+#                             except Exception as e:
+#                                 print(e)
+#                                 pass
+# def is_screen_active(port,host="127.1.1.0",timeout=.5):
+#     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #presumably 
+#     sock.settimeout(timeout)
+#     try:
+#        sock.connect((host,port))
+#     except:
+#        return False
+#     else:
+#        sock.close()
+#        return True
 
 createConfigFile()
 counter = 60
@@ -187,9 +187,9 @@ while True:
 
     if counter >= timeBetweenStatusInMinutes*2:
         counter = 0
-        print("Removing files with 'REDO' in the name:")
-        removeREDOS(offs)
-        print("The files have been Removed.")
+        # print("Removing files with 'REDO' in the name:")
+        # removeREDOS(offs)
+        # print("The files have been Removed.")
         getStatus(simulVms,a,offs)
     if getCheckIfTurnOneOn(simulVms,a,offs):
         e,*_ = getOldestOffFile(offs)
