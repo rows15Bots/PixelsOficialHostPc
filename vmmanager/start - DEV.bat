@@ -1,0 +1,2 @@
+py vmmanagerDEV.py
+pause
