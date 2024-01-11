@@ -146,7 +146,7 @@ def removeREDOS(offs,timeFromOffInMinutes=10):
 def removeREDOSAction(folderNumber):
     if not is_screen_active(int(folderNumber)+5000):
                 VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
-                print(VmFullPath)
+                # print(VmFullPath)
                 if os.path.isdir(VmFullPath):
                     redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file and not 'lck' in file]
                     # print(redo_files)
