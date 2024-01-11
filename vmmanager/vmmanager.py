@@ -144,7 +144,9 @@ def removeREDOS(offs,timeFromOffInMinutes=10):
             # print(folderNumber,hasBeenOffFor)
 
 def removeREDOSAction(folderNumber):
-    if not is_screen_active(int(folderNumber)+5000):
+    if not is_screen_active(int(folderNumber)+5000,timeout=3):
+        if not is_screen_active(int(folderNumber)+5000,timeout=3):
+            if not is_screen_active(int(folderNumber)+5000,timeout=3):
                 VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
                 # print(VmFullPath)
                 if os.path.isdir(VmFullPath):
