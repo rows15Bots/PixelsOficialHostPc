@@ -4,7 +4,7 @@ from time import sleep
 from pathlib import Path
 import subprocess
 import datetime
-
+import socket
 
 #FUTURO ler data da sauna vip e botar no começo da fila
 
@@ -15,6 +15,7 @@ configFile = r"pixelsVmManager.txt"
 offFile = r"off.txt"
 startFile = r"start.bat"
 baseSharedConfigFolder = r"C:\\VmSharedFolder\\"
+baseVirtualMachinesFolder = r"C:\\Virtual Machines\\"
 defaultSimulVmsString = "Simultaneous Vms: "
 defaultSimulVms = 1
 timeBetweenStatusInMinutes = 3
@@ -128,11 +129,39 @@ def startVm(startPath):
     if os.path.exists(fullOffPath):
         print("Deleted Off")
         os.remove(fullOffPath)
-    
 
-
-#Main
-
+def removeREDOS(offs,timeFromOffInMinutes=10):
+    for i in offs:
+        hasBeenOffFor = datetime.datetime.now()-datetime.datetime.fromtimestamp(i[1])
+        if hasBeenOffFor > datetime.timedelta(minutes=timeFromOffInMinutes):
+            folderNumber = i[0].split("\\")[-1]
+            # print(folderNumber,hasBeenOffFor)
+            if not is_screen_active(int(folderNumber)+5000):
+                VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
+                # print(VmFullPath)
+                if os.path.isdir(VmFullPath):
+                    redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file]
+                    # print(redo_files)
+                    if redo_files:
+                        for redo_file in redo_files:
+                            # print(os.path.join(VmFullPath, redo_file))
+                            file_path = os.path.join(VmFullPath, redo_file)
+                            try:
+                                os.remove(file_path)
+                                print(f"Deleted: {file_path}")
+                            except Exception as e:
+                                print(e)
+                                pass
+def is_screen_active(port,host="127.1.1.0",timeout=.5):
+    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #presumably 
+    sock.settimeout(timeout)
+    try:
+       sock.connect((host,port))
+    except:
+       return False
+    else:
+       sock.close()
+       return True
 
 createConfigFile()
 counter = 60
@@ -141,8 +170,16 @@ while True:
     simulVms,*_ = readConfigFile()
     a = getSharedConfigFolders()
     offs = getListOfOffs(a)
+    
+
+
+
+
     if counter >= timeBetweenStatusInMinutes*2:
         counter = 0
+        print("Removing files with 'REDO' in the name:")
+        removeREDOS(offs)
+        print("Files have Removed.")
         getStatus(simulVms,a,offs)
     if getCheckIfTurnOneOn(simulVms,a,offs):
         e,*_ = getOldestOffFile(offs)
