@@ -135,7 +135,7 @@ def removeREDOS(offs,timeFromOffInMinutes=10):
     for i in offs:
         hasBeenOffFor = datetime.datetime.now()-datetime.datetime.fromtimestamp(i[1])
         if hasBeenOffFor > datetime.timedelta(minutes=timeFromOffInMinutes):
-            sleep(.01)
+            sleep(.1)
             folderNumber = i[0].split("\\")[-1]
             thread = threading.Thread(target=removeREDOSAction, args=(folderNumber,))
             threads.append(thread)
