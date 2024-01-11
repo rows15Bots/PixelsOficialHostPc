@@ -93,17 +93,16 @@ currentMaps = {
 "1145":[0,[]],
 "1150":[0,[]],
 "1804":[0,[]],
-"2552":[0,[]],
 "2682":[0,[]],
 "3013":[0,[]],
 "3713":[0,[]],
 "4446":[0,[]],
 }
 def get_approved_ips(folder, folder_number):
-    folder_path = os.path.join(folder, str(folder_number))
-    off_txt_path = os.path.join(folder_path, "off.txt")
+        folder_path = os.path.join(folder, str(folder_number))
+        off_txt_path = os.path.join(folder_path, "off.txt")
 
-    if not os.path.exists(off_txt_path):
+    # if not os.path.exists(off_txt_path):
         shared_json_path = os.path.join(folder_path, "sharedConfig.json")
         with lock:
             if os.path.exists(shared_json_path):
