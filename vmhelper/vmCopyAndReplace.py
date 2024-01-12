@@ -193,26 +193,35 @@ def actionTaker(action,vmRange):
                     new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
 
                     # Add lines to the .vmx file
-                    with open(new_vmx_file_path, 'a') as vmx_file:
-                        vmx_file.write("ethernet0.connectionType = \"nat\"\n")
+                    try:
+                        with open(new_vmx_file_path, 'a') as vmx_file:
+                            vmx_file.write("ethernet0.connectionType = \"nat\"\n")
+                    except Exception as e:
+                        print(e)
             case "removenat":
                 for number in vmRange:
                     destination_folder_name = str(number)
                     new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
 
                     # Remove line from the .vmx file
-                    with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
-                        for line in vmx_file:
-                            if 'ethernet0.connectionType =' not in line:
-                                print(line, end='')
+                    try:
+                        with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
+                            for line in vmx_file:
+                                if 'ethernet0.connectionType =' not in line:
+                                    print(line, end='')
+                    except Exception as e:
+                        print(e)
             case "hnp":
                 for number in vmRange:
                     destination_folder_name = str(number)
                     new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
 
                     # Add lines to the .vmx file
-                    with open(new_vmx_file_path, 'a') as vmx_file:
-                        vmx_file.write("nvme0:0.mode = \"independent-nonpersistent\"\n")
+                    try:
+                        with open(new_vmx_file_path, 'a') as vmx_file:
+                            vmx_file.write("nvme0:0.mode = \"independent-nonpersistent\"\n")
+                    except Exception as e:
+                        print(e)
 
             case "hp":
                 for number in vmRange:
@@ -220,10 +229,13 @@ def actionTaker(action,vmRange):
                     new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
 
                     # Remove line from the .vmx file
-                    with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
-                        for line in vmx_file:
-                            if 'nvme0:0.mode = "independent-nonpersistent"' not in line:
-                                print(line, end='')
+                    try:
+                        with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
+                            for line in vmx_file:
+                                if 'nvme0:0.mode = "independent-nonpersistent"' not in line:
+                                    print(line, end='')
+                    except Exception as e:
+                        print(e)
             case "p":
                 cores = input("How Many Cores? (d = default)")
                 if not cores.isdigit() and cores != "d":
@@ -235,15 +247,18 @@ def actionTaker(action,vmRange):
                         new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
 
                         # Remove line from the .vmx file
-                        with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
-                            for line in vmx_file:
-                                if 'cpu' not in line:
-                                    print(line, end='')
-                    
-                        #add all cpu info
-                        with open(new_vmx_file_path, 'a') as vmx_file:
-                            vmx_file.write(f"cpuid.coresPerSocket = \"1\"\n")
-                            vmx_file.write(f"numvcpus = \"2\"\n")
+                        try:
+                            with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
+                                for line in vmx_file:
+                                    if 'cpu' not in line:
+                                        print(line, end='')
+                        
+                            #add all cpu info
+                            with open(new_vmx_file_path, 'a') as vmx_file:
+                                vmx_file.write(f"cpuid.coresPerSocket = \"1\"\n")
+                                vmx_file.write(f"numvcpus = \"2\"\n")
+                        except Exception as e:
+                            print(e)
                     return
 
 
@@ -253,15 +268,18 @@ def actionTaker(action,vmRange):
                     new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
 
                     # Remove line from the .vmx file
-                    with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
-                        for line in vmx_file:
-                            if 'cpu' not in line:
-                                print(line, end='')
-                
-                #add all cpu info
-                    with open(new_vmx_file_path, 'a') as vmx_file:
-                        vmx_file.write(f"cpuid.coresPerSocket = \"{cores}\"\n")
-                        vmx_file.write(f"numvcpus = \"{cores}\"\n")
+                    try:
+                        with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
+                            for line in vmx_file:
+                                if 'cpu' not in line:
+                                    print(line, end='')
+                    
+                    #add all cpu info
+                        with open(new_vmx_file_path, 'a') as vmx_file:
+                            vmx_file.write(f"cpuid.coresPerSocket = \"{cores}\"\n")
+                            vmx_file.write(f"numvcpus = \"{cores}\"\n")
+                    except Exception as e:
+                        print(e)
                 return
 
             case "c":
