@@ -67,12 +67,20 @@ def getListOfOffs(sharedConfigFolders):
 
 def removeREDOSAction(folderNumber):
     if not is_screen_active(int(folderNumber)+5000,timeout=3):
+        sleep(.5)
         if not is_screen_active(int(folderNumber)+5000,timeout=3):
+            sleep(.5)
             if not is_screen_active(int(folderNumber)+5000,timeout=3):
+                sleep(.5)
                 VmFullPath = os.path.join(baseVirtualMachinesFolder,folderNumber)
                 # print(VmFullPath)
                 if os.path.isdir(VmFullPath):
-                    redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file and not 'lck' in file]
+                    # redo_files = [file for file in os.listdir(VmFullPath) if 'REDO' in file and not 'lck' in file]
+                    redo_files = []
+                    for file in os.listdir(VmFullPath):
+                        sleep(.1)
+                        if 'REDO' in file and 'lck' not in file:
+                            redo_files.append(file)
                     # print(redo_files)
                     if redo_files:
                         for redo_file in redo_files:
@@ -81,6 +89,7 @@ def removeREDOSAction(folderNumber):
                             try:
                                 os.remove(file_path)
                                 print(f"Deleted: {file_path}")
+                                sleep(.5)
                             except Exception as e:
                                 print(e)
                                 pass

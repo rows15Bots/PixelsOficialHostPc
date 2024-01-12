@@ -48,6 +48,8 @@ def inputGetter():
     print("removenat  =  Create Vms")
     print("c    =  Create Vms")
     print("hnp  = Make Hdds Non Persistent")
+    print("p    = Set processors and cores")
+    print("m    = Set MemSize")
     print("hp   = Make Hdds Persistent")
     print("mnem = Check for Mnems in Shared config")
     print("offs = Create offs in the folders selected")
@@ -56,7 +58,7 @@ def inputGetter():
     print("qqq  = Exits Script")
 
     action = input("Choose Action: ")
-    if action not in ["addnat","removenat","c","hnp","hp","mnem","offs","s","qqq"]:
+    if action not in ["addnat","removenat","c","hnp","hp","mnem","offs","p","s","qqq"]:
         print("Failed to interpret the Action.")
         return None,None
     if action == "qqq":
@@ -222,6 +224,46 @@ def actionTaker(action,vmRange):
                         for line in vmx_file:
                             if 'nvme0:0.mode = "independent-nonpersistent"' not in line:
                                 print(line, end='')
+            case "p":
+                cores = input("How Many Cores? (d = default)")
+                if not cores.isdigit() and cores != "d":
+                    print("Invalid input. Please enter a valid number.")
+                    return
+                if cores == "d":
+                    for number in vmRange:
+                        destination_folder_name = str(number)
+                        new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
+
+                        # Remove line from the .vmx file
+                        with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
+                            for line in vmx_file:
+                                if 'cpu' not in line:
+                                    print(line, end='')
+                    
+                        #add all cpu info
+                        with open(new_vmx_file_path, 'a') as vmx_file:
+                            vmx_file.write(f"cpuid.coresPerSocket = \"1\"\n")
+                            vmx_file.write(f"numvcpus = \"2\"\n")
+                    return
+
+
+                #delete all cpu info
+                for number in vmRange:
+                    destination_folder_name = str(number)
+                    new_vmx_file_path = os.path.join(virtualMachinesFolder, destination_folder_name, f"{destination_folder_name}.vmx")
+
+                    # Remove line from the .vmx file
+                    with fileinput.FileInput(new_vmx_file_path, inplace=True) as vmx_file:
+                        for line in vmx_file:
+                            if 'cpu' not in line:
+                                print(line, end='')
+                
+                #add all cpu info
+                    with open(new_vmx_file_path, 'a') as vmx_file:
+                        vmx_file.write(f"cpuid.coresPerSocket = \"{cores}\"\n")
+                        vmx_file.write(f"numvcpus = \"{cores}\"\n")
+                return
+
             case "c":
                 source_folder_name = "change_me_n"
                 for number in vmRange:
