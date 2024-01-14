@@ -91,9 +91,12 @@ def actionTaker(action,vmRange):
                 for number in vmRange:
                     off_file_path = os.path.join(sharedFolder, str(number), 'off.txt')
                     if not os.path.exists(off_file_path):
-                        with open(off_file_path, 'w') as off_file:
-                            off_file.write("off")
-                        print("Created Off:",number)
+                        try:
+                            with open(off_file_path, 'w') as off_file:
+                                off_file.write("off")
+                            print("Created Off:",number)
+                        except Exception as e:
+                            print(e)
 
 
             case "mnem":

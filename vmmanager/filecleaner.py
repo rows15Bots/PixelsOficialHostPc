@@ -89,7 +89,7 @@ def removeREDOSAction(folderNumber):
                             try:
                                 os.remove(file_path)
                                 print(f"Deleted: {file_path}")
-                                sleep(.5)
+                                sleep(2)
                             except Exception as e:
                                 print(e)
                                 pass
