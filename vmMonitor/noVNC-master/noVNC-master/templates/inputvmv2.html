@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            background-color: dimgrey;
+            height: 100%;
+        }
+
+        #screen-container {
+            display: grid;
+            grid-template-columns: 1;
+            grid-gap: 3px;
+            overflow: hidden;
+        }
+
+        .canvas-container {
+            outline: none;
+            margin: 0;
+            cursor: none;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: rgb(40, 40, 40);
+            position: relative;
+        }
+
+        .screenTitle {
+            position: absolute;
+            font-size: 20px;
+            background-color: black;
+            bottom: 10px;
+            left: 30%;
+            color: white;
+        }
+
+        .screen {
+            flex: 1;
+            aspect-ratio: 16 / 9;
+            height: 100vh;
+            overflow: hidden;
+            background-color: rgb(53, 53, 53);
+            display: flex;
+            position: relative;
+            margin: 3px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            outline: none;
+        }
+
+        /* Added styles for the button */
+        #toggleButton {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            z-index: 1000; /* Ensure the button is above other elements */
+        }
+
+        /* Added style for green background when viewOnly is false */
+        #toggleButton.viewOnlyFalse {
+            background-color: green;
+            color: aliceblue;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="screen-container"></div>
+
+    <!-- Moved the button inside the body -->
+    <button id="toggleButton">Input Enabled</button>
+
+    <script type="module" crossorigin="anonymous">
+        // JavaScript code remains unchanged
+        const toggleButton = document.getElementById('toggleButton');
+        toggleButton.addEventListener('click', () => {
+            rfb.viewOnly = !rfb.viewOnly;
+            console.log('viewOnly is now:', rfb.viewOnly);
+            if (rfb.viewOnly) {
+                toggleButton.classList.remove('viewOnlyFalse');
+            } else {
+                toggleButton.classList.add('viewOnlyFalse');
+            }
+        });
+        import RFB from '/allvms/core/rfb.js';
+        var currentservers;
+        let rfb;
+        var fullUrl = window.location.href;
+        var url = new URL(fullUrl);
+        var ip = url.pathname.split('/')[1];  // Assumes IP is the first segment of the path
+        var port = url.pathname.split('/')[2];  // Assumes port is the second segment of the path
+
+        function updateServers() {
+            const host = window.location.hostname;
+            const path = 'websockify'
+            const screenItem = document.createElement('div');
+            document.title = ip.slice(-2) + " - " + port.slice(-3);
+            const screenList = document.getElementById('screen-container');
+            screenItem.className = 'screen';
+            screenItem.id = ip+port;
+            screenList.appendChild(screenItem);
+            
+            const screenItemTitle = document.createElement('a');
+            screenItemTitle.className = 'screenTitle';
+            screenItemTitle.textContent = ip+"-"+(port-5000)
+            screenItem.appendChild(screenItemTitle);
+            fetch(`/get_websocketport/${ip}/${port}`)
+            .then(response => response.json())
+            .then(data => {
+                port = data.wsports;
+                console.log('WebSocket Port:', port);
+                // screenItem.textContent = server.join(', ')+port;
+                let url = `${window.location.protocol === "https:" ? 'wss' : 'ws'}://${host}:${port}/${path}`;
+                rfb = new RFB(screenItem, url);
+                // rfb.addEventListener("disconnect", disconnectedFromServer);
+                rfb.viewOnly = true
+                rfb.scaleViewport = true
+            })
+            .catch(error => console.error('Error fetching WebSocket port:', error)); 
+
+        }
+
+        // Update servers every 5 seconds
+
+        // Initial call to populate the list
+        updateServers();
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VNC Servers</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: dimgrey;
+            height: 100%;
+            display: grid;
+            grid-template-rows: auto 1fr; /* Header and content areas */
+            grid-template-columns: 1fr; /* Main content area */
+            grid-gap: 10px;
+        }
+
+        #top_bar {
+            background-color: #6e84a3;
+            color: white;
+            font: bold 12px Helvetica;
+            padding: 6px 5px 4px 5px;
+            border-bottom: 1px outset;
+        }
+        p{
+            color: aliceblue;
+            margin-top: 0;
+            font-size: 2.5vh;
+            margin-bottom: 0;
+            margin-left: 30%;
+        }
+        #status {
+            text-align: center;
+        }
+
+        #sendCtrlAltDelButton {
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            border: 1px outset;
+            padding: 5px 5px 4px 5px;
+            cursor: pointer;
+        }
+
+        .screen-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            grid-gap: 3px;
+            overflow: hidden;
+            height: 96%;
+        }
+        .canvas-div-rfb{
+            position: relative;
+            top: -4%;
+        }
+        
+        .screen {
+            flex: 1; /* fill remaining space */
+            overflow: hidden;
+            background-color: white; /* Add your desired background color */
+            display: flex; /* added display: flex */
+        }
+
+        .canvas-container {
+            /* margin: auto; */
+            outline: none;
+            margin:0;
+            cursor: none;
+            width: 100%; /* set width to 100% */
+            height: 100%;
+            overflow: hidden;
+            background: rgb(40, 40, 40);
+        }
+
+        canvas {
+            position: relative;
+            top: -7%;
+            width: 5%; /* set width to 100% */
+            height: 0px;
+            margin: 0px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="top_bar">
+        <!-- Your top bar content goes here -->
+    </div>
+
+    <div class="screen-container">
+        {% for server in servers %}
+            <div class="screen" id="screen{{ loop.index }}">
+                <!-- This is where the remote screen will appear for server {{ loop.index }} -->
+                <div class="canvas-container">
+                    <a href="/{{server[0]}}/{{server[1]}}"><p>
+                        <span style="color: green;">{{ server[3] }}</span>
+                        -  <span style="color: rgb(101, 101, 255);">{{ server[1] - 5000 }}</span>
+                    </p></a>
+                    <canvas  tabindex="-1"></canvas>
+                </div>
+            </div>
+
+            <script type="module" crossorigin="anonymous">
+                function disconnectedFromServer(e) {
+                    setTimeout(function() {
+                        // location.reload();
+                        window.location.href = "/refresh"
+                    }, 8000);
+
+        };
+                import RFB from './allvms/core/rfb.js';
+                let rfb;
+
+                function readQueryVariable(name, defaultValue) {
+                    const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+                        match = document.location.href.match(re);
+
+                    if (match) {
+                        return decodeURIComponent(match[1]);
+                    }
+
+                    return defaultValue;
+                }
+
+                const host = window.location.hostname;
+                // const host = readQueryVariable('host', "{{ server[0] }}");
+                const port = readQueryVariable('port', "{{ server[2] }}");
+                const path = 'websockify'
+
+                let url = `${window.location.protocol === "https:" ? 'wss' : 'ws'}://${host}:${port}/${path}`;
+
+                rfb = new RFB(document.getElementById('screen{{ loop.index }}').getElementsByClassName('canvas-container')[0], url);
+                rfb.addEventListener("disconnect", disconnectedFromServer);
+                rfb.viewOnly = readQueryVariable('view_only', true);
+                rfb.scaleViewport = readQueryVariable('scale', true);
+            </script>
+        {% endfor %}
+    </div>
+</body>
+</html>
