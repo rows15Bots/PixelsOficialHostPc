@@ -1,3 +1,11 @@
+JSON.stringify([
+    ...Array.from(Phaser.Display.Canvas.CanvasPool.pool[1].parent.scene.game.scene.scenes[1].otherPlayers.values())
+      .filter(player => player.playerData.label === "avetruz")
+      .map(player => [player.playerData.label, player.playerData.position]),
+    ["Me:",Phaser.Display.Canvas.CanvasPool.pool[1].parent.scene.game.scene.scenes[1].selfPlayer.position]
+  ])
+
+
 ws = Phaser.Display.Canvas.CanvasPool.pool[0].parent.game.scene.scenes[1].camera.scene.stateManager.room.connection.transport.ws
 ws = Phaser.Display.Canvas.CanvasPool.pool[0].parent.game.scene.scenes[1].stateManager.room.connection.transport.ws
 

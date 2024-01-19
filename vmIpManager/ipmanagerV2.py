@@ -184,7 +184,11 @@ counter = 26
 while True:
     counter +=1
     #Default Reject:
-    approvedIps = ["191.254.219.66"]
+    approvedIps = [
+        "179.111.62.59", #my ip
+
+        # "154.6.130.149", #bad ips
+        ]
     create_and_start_threads_folders('read')
     sleep(1)
     create_and_start_threads_folders('write')
