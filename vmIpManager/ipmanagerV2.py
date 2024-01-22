@@ -115,7 +115,7 @@ def create_and_start_threads_ids(shared_folder,readOrWrite):
     # match readOrWrite:
         if readOrWrite ==  'read':
             threads = []
-            for i in range(1, 251):
+            for i in range(1, 301):
                 thread = threading.Thread(target=get_approved_ips, args=(shared_folder, i))
                 threads.append(thread)
                 thread.start()
@@ -125,7 +125,7 @@ def create_and_start_threads_ids(shared_folder,readOrWrite):
                 thread.join()
         if readOrWrite ==  'write':
             threads = []
-            for i in range(1, 251):
+            for i in range(1, 301):
                 thread = threading.Thread(target=set_status_ips, args=(shared_folder, i))
                 threads.append(thread)
                 thread.start()
@@ -135,7 +135,7 @@ def create_and_start_threads_ids(shared_folder,readOrWrite):
                 thread.join()
         if readOrWrite ==  'status':
             threads = []
-            for i in range(1, 251):
+            for i in range(1, 301):
                 thread = threading.Thread(target=get_approved_ips, args=(shared_folder, i, True))
                 threads.append(thread)
                 thread.start()
