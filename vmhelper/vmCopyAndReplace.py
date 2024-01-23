@@ -53,19 +53,22 @@ def inputGetter():
     print("hp   = Make Hdds Persistent")
     print("mnem = Check for Mnems in Shared config")
     print("offs = Create offs in the folders selected")
+    print("aoff = OFFIFY ALL MACHINES")
     print("s    = Start Fresh Machines")
     # print("shut = Shutdown all machines")
     print("qqq  = Exits Script")
 
     action = input("Choose Action: ")
-    if action not in ["addnat","removenat","c","hnp","hp","mnem","offs","p","s","qqq"]:
+    if action not in ["addnat","aoff","removenat","c","hnp","hp","mnem","offs","p","s","qqq"]:
         print("Failed to interpret the Action.")
         return None,None
     if action == "qqq":
         sys.exit()
-
-    actionRange = input("Choose VMs Range (e.g., '3:5' or '4'): ")
-    print(actionRange)
+    if action != "aoff":
+        actionRange = input("Choose VMs Range (e.g., '3:5' or '4'): ")
+        print(actionRange)
+    else:
+        actionRange = "1:999"
             
     number1, number2 = interpretActionRange(actionRange)
     if number1 is not None and number2 is not None:
