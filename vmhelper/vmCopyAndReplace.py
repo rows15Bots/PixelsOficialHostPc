@@ -88,7 +88,7 @@ def actionTaker(action,vmRange):
         virtualMachinesFolder = r"C:\Virtual Machines"
         sharedFolder = r"C:\VmSharedFolder"
         match action:
-            case "offs":
+            case "offs"|"aoff":
                 print("this will create offs in the folders chosen if it doesn't already exists")
                 input("press Enter to continue...")
                 for number in vmRange:
