@@ -77,7 +77,14 @@ def get_approved_ips(folder, folder_number,readableOutput=False):
     ip_txt_path = os.path.join(folder_path, "ip.txt")
 
     if os.path.exists(ip_txt_path):
-        status = readLineContaining(ip_txt_path,"Status: ","").replace("Status: ","").replace("\n","")
+        try:
+            status = readLineContaining(ip_txt_path,"Status: ","").replace("Status: ","").replace("\n","")
+        except Exception as e:
+            print(f"An exception occurred: {e}")
+            with open(ip_txt_path, 'w') as file:
+                file.write('Ip: off\nStatus: rejected')
+            sleep(1)
+            status = readLineContaining(ip_txt_path,"Status: ","").replace("Status: ","").replace("\n","")
         if approved in status:
             # print(status)
             ip = readLineContaining(ip_txt_path,"Ip: ","").replace("Ip: ","").replace("\n","")
@@ -95,7 +102,14 @@ def set_status_ips(folder, folder_number):
     ip_txt_path = os.path.join(folder_path, "ip.txt")
 
     if os.path.exists(ip_txt_path):
-        status = readLineContaining(ip_txt_path,"Status: ","").replace("Status: ","").replace("\n","")
+        try:
+            status = readLineContaining(ip_txt_path,"Status: ","").replace("Status: ","").replace("\n","")
+        except Exception as e:
+            print(f"An exception occurred: {e}")
+            with open(ip_txt_path, 'w') as file:
+                file.write('Ip: off\nStatus: rejected')
+            sleep(1)
+            status = readLineContaining(ip_txt_path,"Status: ","").replace("Status: ","").replace("\n","")
         if asking in status:
             # print(status)
             # print(status)
