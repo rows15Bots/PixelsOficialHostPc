@@ -122,13 +122,15 @@ def getOldestOffFile(listOfOffs):
 def startVm(startPath):
     fullStartPath = os.path.join(startPath,startFile)
     fullOffPath = os.path.join(startPath,offFile)
-    
-    result = subprocess.run([fullStartPath], capture_output=True, text=True, check=True)
-    print(datetime.datetime.now())
-    print("Started Vm",startPath)
-    if os.path.exists(fullOffPath):
-        print("Deleted Off")
-        os.remove(fullOffPath)
+    try:
+        result = subprocess.run([fullStartPath], capture_output=True, text=True, check=True)
+        print(datetime.datetime.now())
+        print("Started Vm",startPath)
+        if os.path.exists(fullOffPath):
+            print("Deleted Off")
+            os.remove(fullOffPath)
+    except Exception as e:
+        print(e)
 
 # def removeREDOS(offs,timeFromOffInMinutes=10):
 #     threads = []
