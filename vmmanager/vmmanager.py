@@ -200,7 +200,7 @@ while True:
         a = getSharedConfigFolders()
         offs = getListOfOffs(a)
         getStatus(simulVms,a,offs)
-    for i in range(30):
+    for i in range(15):
         sleep(1)
 
 
